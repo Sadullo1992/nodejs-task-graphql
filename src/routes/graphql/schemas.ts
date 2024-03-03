@@ -1,14 +1,9 @@
 import { Type } from '@fastify/type-provider-typebox';
-import { PrismaClient } from '@prisma/client';
-import {
-  GraphQLEnumType,
-  GraphQLFloat,
-  GraphQLInt,
-  GraphQLList,
-  GraphQLNonNull,
-  GraphQLObjectType,
-  GraphQLSchema,
-} from 'graphql';
+import { GraphQLObjectType, GraphQLSchema } from 'graphql';
+import { memberQueries } from './member/queries.js';
+import { postQueries } from './post/queries.js';
+import { profileQueries } from './profile/queries.js';
+import { userQueries } from './user/queries.js';
 
 export const gqlResponseSchema = Type.Partial(
   Type.Object({
@@ -29,40 +24,13 @@ export const createGqlResponseSchema = {
   ),
 };
 
-const memberTypeId = new GraphQLEnumType({
-  name: 'MemberTypeId',
-  values: {
-    BASIC: { value: 'basic' },
-    BUSINESS: { value: 'business' },
-  },
-});
-
-const memberType = new GraphQLObjectType({
-  name: 'MemberType',
-  fields: () => ({
-    id: {
-      type: memberTypeId,
-      description: 'ID',
-    },
-    discount: {
-      type: new GraphQLNonNull(GraphQLFloat),
-      description: 'discount',
-    },
-    postsLimitPerMonth: {
-      type: new GraphQLNonNull(GraphQLInt),
-      description: 'postsLimitPerMonth',
-    },
-  }),
-});
-
 const rootQuery = new GraphQLObjectType({
   name: 'Query',
   fields: {
-    memberTypes: {
-      type: new GraphQLList(memberType),
-      resolve: (_, _args, { prisma }: { prisma: PrismaClient }) =>
-        prisma.memberType.findMany(),
-    },
+    ...memberQueries,
+    ...postQueries,
+    ...userQueries,
+    ...profileQueries,
   },
 });
 

@@ -35,31 +35,30 @@ await test('gql-queries', async (t) => {
             id
             discount
             postsLimitPerMonth
-        }        
+          } 
+        posts {
+            id
+            title
+            content
+          }  
+        users {
+            id
+            name
+            balance
+          }  
+        profiles {
+            id
+            isMale
+            yearOfBirth
+          }   
     }`,
     });
 
     t.ok(data.memberTypes.length === memberTypes.length);
-    // t.ok(data.posts.length === posts.length);
-    // t.ok(data.users.length === users.length);
-    // t.ok(data.profiles.length === profiles.length);
+    t.ok(data.posts.length === posts.length);
+    t.ok(data.users.length === users.length);
+    t.ok(data.profiles.length === profiles.length);
   });
-
-  // posts {
-  //           id
-  //           title
-  //           content
-  //       }
-  //       users {
-  //           id
-  //           name
-  //           balance
-  //       }
-  //       profiles {
-  //           id
-  //           isMale
-  //           yearOfBirth
-  //       }
 
   // await t.test('Get all resources by their id.', async (t) => {
   //   const { body: user1 } = await createUser(app);
