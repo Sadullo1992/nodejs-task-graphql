@@ -49,4 +49,49 @@ export const userMutation = {
         data: args.dto,
       }),
   },
+  subscribeTo: {
+    type: userType,
+    args: {
+      userId: {
+        type: new GraphQLNonNull(UUIDType),
+      },
+      authorId: {
+        type: new GraphQLNonNull(UUIDType),
+      },
+    },
+    resolve: async (_, args, { prisma }: IContext) =>
+      await prisma.user.update({
+        where: {
+          id: args.userId,
+        },
+        data: {
+          userSubscribedTo: {
+            create: {
+              authorId: args.authorId,
+            },
+          },
+        },
+      }),
+  },
+  unsubscribeFrom: {
+    type: GraphQLBoolean,
+    args: {
+      userId: {
+        type: new GraphQLNonNull(UUIDType),
+      },
+      authorId: {
+        type: new GraphQLNonNull(UUIDType),
+      },
+    },
+    resolve: async (_, args, { prisma }: IContext) => {
+      await prisma.subscribersOnAuthors.delete({
+        where: {
+          subscriberId_authorId: {
+            subscriberId: args.userId,
+            authorId: args.authorId,
+          },
+        },
+      });
+    },
+  },
 };
