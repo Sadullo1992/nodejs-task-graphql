@@ -1,5 +1,6 @@
 import { GraphQLBoolean, GraphQLInt, GraphQLNonNull, GraphQLObjectType } from 'graphql';
-import { memberTypeId } from '../member/schemas.js';
+import { memberType, memberTypeId } from '../member/schemas.js';
+import { IContext } from '../types/types.js';
 import { UUIDType } from '../types/uuid.js';
 
 export const profileType = new GraphQLObjectType({
@@ -24,6 +25,13 @@ export const profileType = new GraphQLObjectType({
     memberTypeId: {
       type: memberTypeId,
       description: 'member type ID',
+    },
+    memberType: {
+      type: memberType,
+      resolve: async (args, _, { prisma }: IContext) =>
+        await prisma.memberType.findUnique({
+          where: { id: args.memberTypeId },
+        }),
     },
   }),
 });
