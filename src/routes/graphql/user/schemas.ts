@@ -1,5 +1,6 @@
 import {
   GraphQLFloat,
+  GraphQLInputObjectType,
   GraphQLList,
   GraphQLNonNull,
   GraphQLObjectType,
@@ -66,4 +67,16 @@ export const userType = new GraphQLObjectType({
         }),
     },
   }),
+});
+
+export const userInputType = new GraphQLInputObjectType({
+  name: 'CreateUserInput',
+  fields: {
+    name: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    balance: {
+      type: new GraphQLNonNull(GraphQLFloat),
+    },
+  },
 });
