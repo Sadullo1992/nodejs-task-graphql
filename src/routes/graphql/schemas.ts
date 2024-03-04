@@ -26,12 +26,12 @@ export const createGqlResponseSchema = {
 
 const rootQuery = new GraphQLObjectType({
   name: 'Query',
-  fields: {
+  fields: () => ({
     ...memberQueries,
     ...postQueries,
     ...userQueries,
     ...profileQueries,
-  },
+  }),
 });
 
 export const graphQLSchema = new GraphQLSchema({
