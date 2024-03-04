@@ -28,43 +28,23 @@ export const userType = new GraphQLObjectType({
     },
     posts: {
       type: new GraphQLList(postType),
-      resolve: async (args, _, { prisma }: IContext) =>
-        await prisma.post.findMany({
-          where: { authorId: args.id },
-        }),
+      resolve: async (args, _, { loader }: IContext) =>
+        await loader.postLoader.load(args.id),
     },
     profile: {
       type: profileType,
-      resolve: async (args, _, { prisma }: IContext) =>
-        await prisma.profile.findUnique({
-          where: { userId: args.id },
-        }),
+      resolve: async (args, _, { loader }: IContext) =>
+        await loader.profileLoader.load(args.id),
     },
     userSubscribedTo: {
       type: new GraphQLList(userType),
-      resolve: async (args, _, { prisma }: IContext) =>
-        await prisma.user.findMany({
-          where: {
-            subscribedToUser: {
-              some: {
-                subscriberId: args.id,
-              },
-            },
-          },
-        }),
+      resolve: async (args, _, { loader }: IContext) =>
+        await loader.userSubscribedToLoader.load(args.id),
     },
     subscribedToUser: {
       type: new GraphQLList(userType),
-      resolve: async (args, _, { prisma }: IContext) =>
-        await prisma.user.findMany({
-          where: {
-            userSubscribedTo: {
-              some: {
-                authorId: args.id,
-              },
-            },
-          },
-        }),
+      resolve: async (args, _, { loader }: IContext) =>
+        await loader.subscribedToUserLoader.load(args.id),
     },
   }),
 });
