@@ -80,3 +80,18 @@ export const userInputType = new GraphQLInputObjectType({
     },
   },
 });
+
+export const userChangeInputType = new GraphQLInputObjectType({
+  name: 'ChangeUserInput',
+  fields: {
+    id: {
+      type: UUIDType,
+    },
+    name: {
+      type: GraphQLString,
+    },
+    balance: {
+      type: GraphQLFloat,
+    },
+  },
+});

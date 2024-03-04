@@ -1,7 +1,7 @@
 import { GraphQLBoolean, GraphQLNonNull } from 'graphql';
 import { IContext } from '../types/types.js';
 import { UUIDType } from '../types/uuid.js';
-import { userInputType, userType } from './schemas.js';
+import { userChangeInputType, userInputType, userType } from './schemas.js';
 
 export const userMutation = {
   createUser: {
@@ -30,5 +30,23 @@ export const userMutation = {
         },
       });
     },
+  },
+  changeUser: {
+    type: userType,
+    args: {
+      id: {
+        type: new GraphQLNonNull(UUIDType),
+      },
+      dto: {
+        type: new GraphQLNonNull(userChangeInputType),
+      },
+    },
+    resolve: async (_, args, { prisma }: IContext) =>
+      await prisma.user.update({
+        where: {
+          id: args.id,
+        },
+        data: args.dto,
+      }),
   },
 };
