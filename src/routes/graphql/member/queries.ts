@@ -5,7 +5,7 @@ import { memberType, memberTypeId } from './schemas.js';
 export const memberQueries = {
   memberTypes: {
     type: new GraphQLList(memberType),
-    resolve: (_, _args, { prisma }: IContext) => prisma.memberType.findMany(),
+    resolve: async (_, _args, { prisma }: IContext) => await prisma.memberType.findMany(),
   },
   memberType: {
     type: memberType,
